@@ -2,14 +2,26 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "config:best-practices",
+    ":enablePreCommit"
   ],
-
-  "rebaseWhen": "never",
+  "prHourlyLimit": 10,
+  "prConcurrentLimit": 20,
+  "recreateWhen": "auto",
+  "rebaseWhen": "auto",
 
   "packageRules": [
     {
+      "description": "Automerge safe low-risk updates (digest/pin only) when checks pass",
+      "matchUpdateTypes": ["digest", "pin", "pinDigest"],
       "automerge": true,
-      "matchUpdateTypes": ["pin", "pinDigest"]
+      "automergeType": "pr",
+      "automergeStrategy": "squash"
+    },
+    {
+      "description": "Do not automatically cross Fedora major releases",
+      "matchDepNames": ["quay.io/fedora/fedora-bootc"],
+      "matchUpdateTypes": ["major"],
+      "enabled": false
     },
     {
       "enabled": false,
