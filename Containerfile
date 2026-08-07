@@ -46,6 +46,10 @@ RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
     --mount=type=tmpfs,dst=/boot \
     /ctx/clean-stage.sh
 
+### INIT
+## Required for bootc images
+CMD ["/sbin/init"]
+
 ### LINTING
 ## Verify final image and contents are correct.
 RUN bootc container lint --fatal-warnings
