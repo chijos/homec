@@ -36,6 +36,16 @@ RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
     --mount=type=tmpfs,dst=/tmp \
     /ctx/build.sh
 
+### CLEANUP
+## Remove build artifacts before linting.
+## /run is deliberately not mounted as tmpfs here: clean-stage.sh must remove
+## image-layer files such as /run/dnf so bootc lint's nonempty-run-tmp check
+## passes.
+RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
+    --mount=type=tmpfs,dst=/tmp \
+    --mount=type=tmpfs,dst=/boot \
+    /ctx/clean-stage.sh
+
 ### LINTING
 ## Verify final image and contents are correct.
 RUN bootc container lint --fatal-warnings
