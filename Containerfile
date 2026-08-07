@@ -26,15 +26,17 @@ FROM quay.io/fedora/fedora-bootc:44@sha256:1650030cbdb106c8454b211acfec0cdd925fd
 
 # RUN rm /opt && mkdir /opt
 
+ARG HOST_NAME="homec"
+
 ### MODIFICATIONS
-## make modifications desired in your image and install packages by modifying the build.sh script
-## the following RUN directive does all the things required to run "build.sh" as recommended.
+## make modifications desired in your image and install packages by modifying the 10-build.sh script
+## the following RUN directive does all the things required to run "10-build.sh" as recommended.
 
 RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
-    --mount=type=cache,dst=/var/cache \
-    --mount=type=cache,dst=/var/log \
-    --mount=type=tmpfs,dst=/tmp \
-    /ctx/build.sh
+  --mount=type=cache,dst=/var/cache \
+  --mount=type=cache,dst=/var/log \
+  --mount=type=tmpfs,dst=/tmp \
+  /ctx/10-build.sh
 
 ### CLEANUP
 ## Remove build artifacts before linting.
@@ -42,9 +44,9 @@ RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
 ## image-layer files such as /run/dnf so bootc lint's nonempty-run-tmp check
 ## passes.
 RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
-    --mount=type=tmpfs,dst=/tmp \
-    --mount=type=tmpfs,dst=/boot \
-    /ctx/clean-stage.sh
+  --mount=type=tmpfs,dst=/tmp \
+  --mount=type=tmpfs,dst=/boot \
+  /ctx/clean-stage.sh
 
 ### INIT
 ## Required for bootc images

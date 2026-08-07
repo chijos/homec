@@ -12,6 +12,9 @@ echo "::group:: Copy in system files"
 # Copy the contents of system_files/ of the git repo to /
 cp -avf "/ctx/system_files"/. /
 
+# Set the hostname
+echo "${HOST_NAME}" >/etc/hostname
+
 echo "::endgroup::"
 
 echo "::group:: Install packages"
@@ -27,7 +30,6 @@ echo "::group:: Install packages"
 dnf5 install -y tmux
 
 echo "::endgroup::"
-
 
 # Use a COPR Example:
 #
