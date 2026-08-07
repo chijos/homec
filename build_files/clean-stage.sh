@@ -46,9 +46,7 @@ find "${CLEAN_ROOT:?}/run" -mindepth 1 -depth -print0 |
 		rm -f "${entry}"
 	done
 
-echo "::endgroup::"
-
 # Restore default glob behavior
 shopt -u nullglob
 
-echo "Clean complete!"
+echo "::endgroup:: ===$(basename "$0")==="

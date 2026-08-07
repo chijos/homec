@@ -1,9 +1,20 @@
 #!/bin/bash
 
-set -ouex pipefail
+echo "::group:: ===$(basename "$0")==="
+
+set -eoux pipefail
+
+# Enable nullglob for all glob operations to prevent failures on empty matches
+shopt -s nullglob
+
+echo "::group:: Copy in system files"
 
 # Copy the contents of system_files/ of the git repo to /
 cp -avf "/ctx/system_files"/. /
+
+echo "::endgroup::"
+
+echo "::group:: Install packages"
 
 ### Install packages
 
@@ -15,6 +26,9 @@ cp -avf "/ctx/system_files"/. /
 # this installs a package from fedora repos
 dnf5 install -y tmux
 
+echo "::endgroup::"
+
+
 # Use a COPR Example:
 #
 # dnf5 -y copr enable ublue-os/staging
@@ -22,6 +36,15 @@ dnf5 install -y tmux
 # Disable COPRs so they don't end up enabled on the final image:
 # dnf5 -y copr disable ublue-os/staging
 
+echo "::group:: Enable Systemd Units"
+
 #### Example for enabling a System Unit File
 
 systemctl enable podman.socket
+
+echo "::endgroup::"
+
+# Restore default glob behavior
+shopt -u nullglob
+
+echo "::endgroup:: ===$(basename "$0")==="
