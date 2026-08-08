@@ -20,8 +20,8 @@ systemctl enable tailscaled
 
 # Tailscale docs say this is where you would start Tailscale with `tailscale up`.
 # But systemd is not actually running at this point, and so neither is tailscaled.
-# We'll add a once-off systemd unit that runs this at first boot and joins the
-#  machine to the tailnet.
+# I don't want to embed a auth-key in the image, so the safest way to get this joined
+#  to the tailnet is to authenticate it manually on first boot.
 
 # Clean up repo file (required - repos don't work at runtime in bootc images)
 rm -f /etc/yum.repos.d/tailscale.repo
