@@ -44,6 +44,12 @@ RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
   --mount=type=tmpfs,dst=/tmp \
   /ctx/20-tailscale.sh
 
+RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
+  --mount=type=cache,dst=/var/cache \
+  --mount=type=cache,dst=/var/log \
+  --mount=type=tmpfs,dst=/tmp \
+  /ctx/30-cloud-init.sh
+
 ### CLEANUP
 ## Remove build artifacts before linting.
 ## /run is deliberately not mounted as tmpfs here: clean-stage.sh must remove
