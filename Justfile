@@ -8,6 +8,7 @@ export image_keywords := env("IMAGE_KEYWORDS")
 export image_logo_url := env("IMAGE_LOGO_URL")
 export default_tag := env("DEFAULT_TAG")
 export bib_image := env("BIB_IMAGE")
+export cloud_init_datasource_url := env("CLOUD_INIT_DATASOURCE_URL")
 
 alias build-vm := build-qcow2
 alias rebuild-vm := rebuild-qcow2
@@ -99,6 +100,7 @@ build $target_image=image_name $tag=default_tag:
     set -euox pipefail
 
     BUILD_ARGS=()
+    BUILD_ARGS+=("--build-arg" "CLOUD_INIT_DATASOURCE_URL={{ cloud_init_datasource_url }}")
     LABELS=()
     if [[ -z "$(git status -s)" ]]; then
         GIT_SHA=$(git rev-parse --short HEAD)

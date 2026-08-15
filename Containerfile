@@ -27,6 +27,7 @@ FROM quay.io/fedora/fedora-bootc:44@sha256:ff18dfdd91e4dfb02a8260b7fbc4e4863a452
 # RUN rm /opt && mkdir /opt
 
 ARG HOST_NAME="homec"
+ARG CLOUD_INIT_DATASOURCE_URL="http://cloud-init-server:8080/cloud-init/"
 
 ### MODIFICATIONS
 ## make modifications desired in your image and install packages by modifying the 10-build.sh script

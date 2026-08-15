@@ -11,6 +11,13 @@ echo "::group:: install cloud-init"
 
 dnf5 -y install cloud-init
 
+mkdir -p /etc/cloud/cloud.cfg.d
+cat <<EOF >/etc/cloud/cloud.cfg.d/10_datasource.cfg
+datasource:
+  NoCloud:
+    seedfrom: "${CLOUD_INIT_DATASOURCE_URL}"
+EOF
+
 echo "::endgroup::"
 
 # Restore default glob behavior
