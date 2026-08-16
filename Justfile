@@ -9,6 +9,8 @@ export image_logo_url := env("IMAGE_LOGO_URL")
 export default_tag := env("DEFAULT_TAG")
 export bib_image := env("BIB_IMAGE")
 export cloud_init_datasource_url := env("CLOUD_INIT_DATASOURCE_URL")
+export cloud_init_server_image_name := 'cloud-init-server'
+export cloud_init_network_name := 'cloud-init-net'
 
 alias build-vm := build-qcow2
 alias rebuild-vm := rebuild-qcow2
@@ -129,7 +131,7 @@ build $target_image=image_name $tag=default_tag:
     podman build "${PODMAN_BUILD_ARGS[@]}" .
 
 # Split the image for smaller updates (New)!
-rechunk $target_image=image_name $tag=default_tag:
+rechunk $target_image=cloud_init_server_image_name $tag=default_tag:
     #!/usr/bin/env bash
 
     set -xeuo pipefail
@@ -193,6 +195,47 @@ ostree-rechunk $target_image=image_name $tag=default_tag:
       --bootc \
       --from "localhost/${target_image}:${tag}" \
       --output containers-storage:"localhost/${target_image}:${tag}"
+
+[group('Local Dev')]
+[private]
+_build-cloud-init-server $target_image='cloud-init-server' $tag=default_tag:
+    #!/usr/bin/env bash
+    set -eoux pipefail
+
+    podman build --tag "${target_image}:${tag}" --file ./cloud_init/Containerfile ./cloud_init/
+
+[group('Local Dev')]
+[private]
+_create-cloud-init-net-if-not-exists $networkName=cloud_init_network_name:
+    #!/usr/bin/env bash
+    set -eoux pipefail
+
+    if podman network exists "${networkName}"; then
+        echo "Podman network '${networkName}' already exists."
+    else
+        echo "Creating podman network '${networkName}' ..."
+        podman network create "${networkName}"
+    fi
+
+[group('Local Dev')]
+run-cloud-init-server $target_image=cloud_init_server_image_name $tag=default_tag $network_name=cloud_init_network_name:
+    #!/usr/bin/env bash
+    set -eoux pipefail
+
+    just _build-cloud-init-server $target_image $tag
+
+    just _create-cloud-init-net-if-not-exists "${network_name}"
+
+    podman run --rm -p 8080:8080 --network "${network_name}" --name cloud-init-server "localhost/${target_image}:${tag}"
+
+[group('Local Dev')]
+run-dev $target_image=image_name $tag=default_tag $network_name=cloud_init_network_name:
+    #!/usr/bin/env bash
+    set -eoux pipefail
+
+    just _create-cloud-init-net-if-not-exists "${network_name}"
+
+    podman run -d --network "${network_name}" "localhost/${target_image}:${tag}"
 
 # Generate Default Tag
 [group('Utility')]

@@ -1,0 +1,11 @@
+#cloud-config
+
+ssh_delete_keys: true # delete all existing SSH keys
+
+users:
+- name: <<USER_NAME>>
+  lock_passwd: true #disable password login, only SSH
+  shell: /bin/bash
+  groups: wheel # admin user
+  ssh_authorized_keys:
+    - ssh-ed25519 ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ # SSH public key

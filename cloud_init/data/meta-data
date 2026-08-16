@@ -1,0 +1,12 @@
+#cloud-config
+
+# Used as an idempotency key. Change it if you want cloud-init to be re-invoked on boot.
+# No prescribed pattern as far as I can find. Pattern I'm using here is:
+#   iid-${IMAGE_NAME}-${FEDORA_BOOTC_MAJOR_VERSION}.YYYYMMDD.R
+instance-id: iid-homec-44.20260816.1
+
+# Set the hostname for the machine
+# See: https://docs.cloud-init.io/en/latest/reference/modules.html#set-hostname
+preserve-hostname: false
+hostname: homec
+create_hostname_file: true
