@@ -27,6 +27,7 @@ FROM quay.io/fedora/fedora-bootc:44@sha256:35f5a8e7e7417a3b15a4d62d1a950ab8a873a
 # RUN rm /opt && mkdir /opt
 
 ARG HOST_NAME="homec"
+ARG CLOUD_INIT_DATASOURCE_URL="http://cloud-init-server:8080/cloud-init/"
 
 ### MODIFICATIONS
 ## make modifications desired in your image and install packages by modifying the 10-build.sh script
@@ -43,6 +44,12 @@ RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
   --mount=type=cache,dst=/var/log \
   --mount=type=tmpfs,dst=/tmp \
   /ctx/20-tailscale.sh
+
+RUN --mount=type=bind,from=ctx,source=/,target=/ctx \
+  --mount=type=cache,dst=/var/cache \
+  --mount=type=cache,dst=/var/log \
+  --mount=type=tmpfs,dst=/tmp \
+  /ctx/30-cloud-init.sh
 
 ### CLEANUP
 ## Remove build artifacts before linting.

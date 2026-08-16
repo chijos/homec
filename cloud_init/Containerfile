@@ -1,0 +1,7 @@
+FROM docker.io/library/caddy:2-alpine AS base
+
+EXPOSE 8080
+
+RUN mkdir -p /srv/cloud-init
+COPY ./data /srv/cloud-init
+COPY ./Caddyfile /etc/caddy/Caddyfile

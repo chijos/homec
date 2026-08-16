@@ -1,0 +1,10 @@
+{
+	log {
+		format console
+	}
+}
+
+http://:8080 {
+	root * /srv
+	file_server
+}
