@@ -3,14 +3,14 @@ name: Validate Renovate Config
 on:
   pull_request:
     paths:
-      - ".github/renovate.json5"
+      - ".github/renovate.jsonc"
       - ".github/workflows/renovate.yml"
       - ".github/workflows/validate-renovate.yml"
   push:
     branches:
       - main
     paths:
-      - ".github/renovate.json5"
+      - ".github/renovate.jsonc"
       - ".github/workflows/renovate.yml"
       - ".github/workflows/validate-renovate.yml"
 
@@ -30,4 +30,4 @@ jobs:
 
       - run: npm install -g renovate@latest
 
-      - run: renovate-config-validator .github/renovate.json5
+      - run: renovate-config-validator .github/renovate.jsonc
