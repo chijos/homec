@@ -46,6 +46,12 @@ systemctl enable podman.socket
 
 echo "::endgroup::"
 
+echo "::group:: Add Quadlets User"
+
+useradd -m quadlets
+
+echo "::endgroup::"
+
 # Restore default glob behavior
 shopt -u nullglob
 
