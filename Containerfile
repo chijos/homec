@@ -4,7 +4,7 @@ COPY build_files /
 COPY system_files /system_files
 
 # Base Image
-FROM quay.io/fedora/fedora-bootc:45@sha256:c3cccbe8c7263cfc610ca9697cf4e0a34bb5b590b394f413f1c159ef63fb15ac
+FROM quay.io/fedora/fedora-bootc:45@sha256:451894faadba48a53c4449efa8b872a1c004b80d8bb3dab71c4c93f631129d59
 ## Other possible base images include:
 # FROM ghcr.io/ublue-os/bazzite:testing
 # FROM ghcr.io/ublue-os/aurora:stable
